@@ -51,7 +51,7 @@
 ##### Binary Classifier (Rosenblatt's Perceptron):
   - single-layer (0 hidden layers) with only 1 binary output node
   - $\Phi(v) = hardlim(v)$ (1 if v>0, otherwise 0)
-  - can only classify linearly separable patterns (e.g. there exists a hyperplane that seperates the classes)
+  - can only classify linearly separable patterns (i.e. there exists a hyperplane that seperates the classes)
   - **Perceptron Training Algorithm**:
     - **given**: training set $D = \{(\vec x(k),d(k)) | k \in [s]\}$ (with k-th sample input $\vec x(k)$, desired output $d(k)$ and $x_0(k) = 1$ for bias) and learning rate $0 < \alpha \le 1$
     - **find**: weights $\vec w(k)$ (with bias $w_0(k)$) at time $k$ that best mimic training set
@@ -82,7 +82,7 @@
 - step 1: k-means clustering algorithm to determine S
   step 2: backpropagation to train weights like normal
 
-- **k-means clustering:** (1) choose random $S$ centers $\vec c_j(0)$, (2) pick random sample $\vec x$, (3) the closest centroid $j(\vec x)$ is moved towards it: $\vec c_j(k+1) \mathrel{+}\mathrel{=} \alpha_c (\vec x(k) - \vec c_j(k))$, (4) repeat from *step (2)* until centers don't move much
+- **k-means clustering:** **(1)** choose random $S$ centers $\vec c_j(0)$, **(2)** pick random sample $\vec x$, **(3)** the closest centroid $j(\vec x)$ is moved towards it: $\vec c_j(k+1) \mathrel{+}\mathrel{=} \alpha_c (\vec x(k) - \vec c_j(k))$, **(4)** repeat from *step (2)* until centers don't move much
 
 - **standard width of gaussian RBFs:** $\sigma = \frac{d_{max}}{\sqrt{2S}}$ where $d_{max}$ max distance between any two clusters
 
@@ -100,7 +100,7 @@
 
 - **positive-definite**: has continuous partial derivatives of each state variable and $V(\bar x) = 0$ and $V(x) > 0$ if $x \neq \bar x$ (*semi-*: $\geq$, *negative-*: $<$)
 
-- **Hopfield Network**: $\vec x(k+1) = \Phi(W \vec x(k) + \vec b)$, usually $\Phi = satlins$ linear capped in $[-1; 1]$
+- **Hopfield Network**: $\vec x(k+1) = \Phi(W \vec x(k) + \vec b)$, usually $\Phi = satlins$ linear capped in $[-1; 1]$, converges always! (TODO: citation needed)
 
 
 
@@ -146,3 +146,32 @@ Q) = (\neg Q \Rightarrow \neg P)$
   **aggregated conclusion:** $B'(y) = \sum_i B_i'(y)$ or $max_i\{B_i'(y)\}$
 
 - **Defuzzification:** centroid $\bar y = (\sum_y y \cdot B'(y)) / (\sum_y B'(y))$
+
+##### T-S Fuzzy Model:
+
+- universal approximators that model a nonlinear plant $\rarr$ TSFM $\rarr$ local-linear fuzzy rules $\rarr$ defuzzify and control plant
+- Continuous FS: "IF $z_1(t)$ is $M_{i1}$ and ... and $z_p(t)$ is $M_{ip}$, THEN ..."
+- **TODO**
+
+
+##### Evolutionary Algorithms:
+
+<!--
+- *genotype* is the underlying genetic coding, *phenotype* is the response to the coding, i.e. behavior
+- evolution is variation & selection: iterative mappings over sets **G**enetic, **P**henotypic and **E**nvironmental sequences:
+  *Epigenesis*: $E \times G \rarr P \implies$ *Selection*: $P \rarr P \implies$ *Genotypic survival*: $P \rarr G \implies$ *Mutation*: $G \rarr G$
+-->
+- iterative search prodecure that generates a *population* of candidate solutions (rather than 1 point like gradient), select best solutions and generates new random solutions based off of them
+- selection:
+  - $(\mu + \lambda)$: $\mu$ parents create $\lambda$ offspring and best $\mu$ from $\mu + \lambda$ become next parents
+  - $(\mu, \lambda)$: best $\mu$ from only $\lambda$ become next parents
+  - proportional/roulette: probability of getting picked is their relative fitness
+  - tournament: select $q$ random, pick best, repeat until full
+- variation:
+  - mutation: binary/gaussian mutation
+  - 1-point crossover: two parents $x, y \in \R^n$ at point $p$ produce two new offsprings
+  $x' = (x_1, x_2, ..., x_{p-1}, y_p, ..., y_n)$
+  $y' = (y_1, y_2, ..., y_{p-1}, x_p, ..., x_n)$
+  - n-point crossover: at each crossover point swap the rest
+  - PMX: pick mappings $x_i \leftrightarrow y_i$ for $i \in \{\text{random indices}\}$, swap values according to mappings, rest stays same
+  - blending: average each components
