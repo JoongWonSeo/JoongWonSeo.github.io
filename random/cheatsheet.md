@@ -2,9 +2,7 @@
 
 
 ##### General:
-- structure determines function
-- parallel distributed
-- generalization
+- structure determines function, parallel distributed, generalization
 - for each node(=neuron) $j$ at iteration $k$:
     Input signals (from prev layer) $y_i, i \in [n]  \\ \qquad \downarrow$
     
@@ -30,10 +28,10 @@
     whole network $E(k) = \sum_{j} E_j(k)$
     avg risk: $\bar E(k) = \frac{1}{K} \sum_{k=1}^K E(k)$
     1. for each weight from $i$ to $j$ (and next layer $l$) in each layer *backwards*:
-    $\qquad \delta_j(k) = -\frac{\partial E(k)}{\partial v_j(k)} = \begin{cases}
+    $\delta_j(k) = -\frac{\partial E(k)}{\partial v_j(k)} = \begin{cases}
         e_j(k) & \cdot & \Phi_j'(v_j(k))                        & \text{if j output layer}  \\
         \sum_l w_{lj}(k) \delta_l(k) & \cdot & \Phi_j'(v_j(k))  & \text{if j hidden layer}  \end{cases}$
-    $\qquad \Delta w_{ji}(k) = \alpha \delta_j(k) y_i(k)$
+    $\Delta w_{ji}(k) = \alpha \delta_j(k) y_i(k)$
     <!--$\qquad w_{ji}(k+1) = w_{ji}(k) + \Delta w_{ji}(k)$-->
     2. repeat step 1 until $\bar E(k)$ below specified threshold
 - **with momentum:**
@@ -70,12 +68,12 @@
 - **Radial-basis function:** real-valued function only dependent on the distance from origin $c$: $\Phi(\vec x, c) = \varphi(\|x - c\|)$ where $\|\vec x\|_2 := \sqrt {\sum_i x_i^2}$
   - i.e.:
     Multiquadrics $\Phi(x) = \sqrt{x^2+c^2}$
-    Inverse multiquadrics $\Phi(x) = \frac{1}{\sqrt{x^2+c^2}}$
+    Inverse multiquadrics $\Phi(x) = \sqrt{x^2+c^2}^{-1}$
     Guassian functions $\Phi(x) = exp(-\frac{x^2}{2\sigma^2}), \sigma > 0$
 
 - essentially calculates $F(x) = \sum_{i=1}^K w_i \Phi(\|x-x^i\|)$ that *universally* and locally (as opposed to globally) approximate continuous function $f: \R^n \rightarrow \R$ given $K$ data points $(\vec x^i, d_i)$ on $f$
 
-- single *hidden* layer with $n$ inputs and 1 output neuron, $S$ many neurons in the hidden layer where $S \leq K$ number of clusters with the centroids on the clusters becoming the interpolation points $\vec x^i$ (**TODO:** what about $d_i$???)
+- single *hidden* layer with $n$ inputs and 1 output neuron, $S$ many neurons in the hidden layer where $S \leq K$ number of clusters with the centroids on the clusters becoming the interpolation points $\vec x^i$
 
 - hidden layer usually non-linear activation function, output layer identity function or linear
 
@@ -100,7 +98,7 @@
 
 - **positive-definite**: has continuous partial derivatives of each state variable and $V(\bar x) = 0$ and $V(x) > 0$ if $x \neq \bar x$ (*semi-*: $\geq$, *negative-*: $<$)
 
-- **Hopfield Network**: $\vec x(k+1) = \Phi(W \vec x(k) + \vec b)$, usually $\Phi = satlins$ linear capped in $[-1; 1]$, converges always! (TODO: citation needed)
+- **Hopfield Network**: $\vec x(k+1) = \Phi(W \vec x(k) + \vec b)$, usually $\Phi = satlins$ linear capped in $[-1; 1]$, converges always!
 
 
 
@@ -127,11 +125,11 @@
 
 - a (crisp) relation $R: X \rarr Y$ can be defined by its **characteristic function** $R: X \times Y \rarr \{0, 1\}$, so a **fuzzy relation** is $R: X \times Y \rarr [0, 1]$
 - **proposition**: given linguistic variables $U, V$ (nouns e.g. AGE), values (=fuzzy set) $A, B$ (adj. e.g. Young), and optionally hedges $H$ (adv. e.g. very, not): "U is H A"
-- **conjunction** (with $U_i$ ling. var. over domains $X_i$): $A_1 \times A_2(x_1, x_2) = A_1(x_1) \land A_2(x_2)$ (matr. repr. possible)
+- **conjunction** (with $U_i$ ling. var. over domains $X_i$): $A_1 \times A_2(x_1, x_2) = A_1(x_1) \land A_2(x_2)$ (matrix representation possible)
 - **condition proposition/implication**: "IF U is A, then V is B"
   *Lukasiewicz(Zadeh):* $R_Z(x,y) = min(1, 1-A(x)+B(y))$
-  Correlation min: $R_{cm}(x,y) = min(A(x),B(y))$
-  Correlation product: $R_{cp}(x,y) = A(x) * B(y)$
+  *Correlation min*: $R_{cm}(x,y) = min(A(x),B(y))$
+  *Correlation product*: $R_{cp}(x,y) = A(x) * B(y)$
 
 - matrix representation: express $A$ and $B$ as row vectors over their domains, then $R = A^T \cdot B$ with operator being $R(x,y)$
 
@@ -150,8 +148,11 @@ Q) = (\neg Q \Rightarrow \neg P)$
 ##### T-S Fuzzy Model:
 
 - universal approximators that model a nonlinear plant $\rarr$ TSFM $\rarr$ local-linear fuzzy rules $\rarr$ defuzzify and control plant
-- Continuous FS: "IF $z_1(t)$ is $M_{i1}$ and ... and $z_p(t)$ is $M_{ip}$, THEN ..."
-- **TODO**
+- Continuous FS: "IF $z_1(t)$ is $M_{i1}$ and ... and $z_p(t)$ is $M_{ip}$, THEN $\dot x(t) = A_i x(t)+B_i u(t), y(t) = C_i x(t)$" (for DFS: $\dot x(t) \rarr x(t+1)$)
+- disc. lin. system $x(t+1) = Ax(t)$ is locally stable if $\forall \lambda \in eig(A): |\lambda|<1$ within unit circle
+- cont. lin. system $\dot x(t) = Ax(t)$ is locally stable if $\forall \lambda \in eig(A): Re(\lambda)<0$
+- (eigenvalues: solve $det(A-\lambda I) = (a-\lambda)(d-\lambda)-bc=0$)
+- DFS: globally asymp. stable if a common positive definite matrix P exists such that $A_i^T P A_i - P < 0, i=1,2,...,r$
 
 
 ##### Evolutionary Algorithms:
