@@ -78,5 +78,16 @@ Max relative distance = **resolution** $\varrho := B^{1-t} \geq \frac{1}{|M|} = 
 Min positive float = $\sigma := B^{t-1} \cdot B^\alpha$
 Max float = $\lambda := (B^t - 1) \cdot B^\beta$
 
+**Rounding** function $rd(x)$ maps every $x \in \R$ to a $f \in \mathbb{F}$
+    - they should be surjective, idempotent and monotone
+    - if $x \in \mathbb{F}$, then $rd(x) = x$
+    - if  $x \in \R \setminus \mathbb{F}$, then every $x := (M + \delta) \cdot B^E,\text{ with } \delta \in (0; 1)$ has a neighbor to left/right:
+        $\quad f_l(x) := max\{ f \in \mathbb{F} \mid f \leq x \} = M \cdot B^E$
+        $\quad f_r(x) := min\{ f \in \mathbb{F} \mid f \geq x \} = (M+1) \cdot B^E$
+    - *rounding down*: $rd_-(x) := f_l(x)$, *rounding up:* $rd_+(x) := f_r(x)$
+    - *chop off* (= towards zero): $rd_0(x) := \begin{cases} f_l(x) & \text{if } x \geq 0 \\ f_r(x) & \text{if } x \leq 0 \end{cases}$
+    - *correct rounding* (= towards closest): $rd_*(x) := \begin{cases} f_l(x) & \text{if } x \leq m \\ f_r(x) & \text{if } x \geq m \end{cases} \text{with } m := \frac{f_l(x)+f_r{x}}{2}$
+        - if x is exactly in the middle, choose what to do!
+
 ##### IEEE-Standard Floats:
 
