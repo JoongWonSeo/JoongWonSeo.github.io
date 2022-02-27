@@ -77,8 +77,9 @@ Chaining of compound problems: $cond(f(x)) := \frac{\partial f(x)}{\partial x}$
 
 **Stability**: an algorithm is **stable**, if all perturbed inputs produce *acceptable* results:
 An approximation $\tilde y(x)$ is **acceptable** if it's the exact solution to a perturbed input: $\tilde y(x) = p(\tilde x)$ (thus if the problem is *ill-conditioned*, $\delta y$ can be large and still be *acceptable*)
+Stability analysis with **Epsilontik**: ...
 
-**Cancellation**: asdfasdf
+**Cancellation**: when subtracting two very similar numbers ($1000 - 999$), even very small relative input error $\pm \frac{1}{1000}$ can lead to high relative output error ($= 2$) which causes the relative condition number to explode ($2000$), even worse for *complete cancellation* (exact result = 0) $\implies cond = \infin$!
 
 
 #### 1. Floating Point Numbers
@@ -130,3 +131,28 @@ Most floating point operators are **not associative** anymore!
 - 64-bit;
     ...
 
+
+
+#### 2. Interpolation
+
+Given $n$ **support points** $(x_i, y_i)$ of function $f(x)$, build an approximant $p(x)$ that goes through them: $\forall i: p(x_i) = y_i$
+**mesh width** $h_i := x_{i+1} - x_i$
+
+**Lagrange interpolation**: only support points are given
+**Hermite interpolation**: each support points additionally have required derivative $y'_i$
+
+**Interpolation using polynoms:**
+- Simple approach: find coefficients of general term $p(x) := \sum_{i=0}^n a_i \cdot x^i$ by solving the system of equations for each support point $(x_i, y_i)$
+- **Lagrange polynomial**: $L_k(x) := \prod_{i:i \neq k} \frac{x-x_i}{x_k-x_i}$ with property that it equals 0 for all nodes except $x_k$, and becomes 1 at node $x_k$
+Therefore $p(x) := \sum_{k=0}^n y_k \cdot L_k(x)$ is a valid polynomial interpolant.
+- **Scheme of Aitken and Neville**: instead of explicitly finding the term $p(x)$, calculate the interpolated value for a concrete $x$
+  - Define auxiliary polynomials $p_{i,k}(x)$ which are polynomials of degree $k$ and interpolate the support points in $[i; i+k]$ (thus base case $\forall i: p_{i,0}(x) = y_i$)
+  - Recursive formula: $p_{i,k}(x) = \frac{x_{i+k} - x}{x_{i+k} - x_i} \cdot p_{i, k-1}(x) + \frac{x - x_i}{x_{i+k} - x_i} \cdot p_{i+1, k-1}(x)$
+  ![triangle aitken and neville](./img/neville.png)
+  - Then $p(x) := p_{0,n}(x)$ (if instead recursive formula is evaluated, the full term $p(x)$ can be determined)
+
+- **Newton's Interpolation Formula**: another recursive formula, but *incremental*, i.e. when another node $x_{n+1}$ is added, only *one new summand has to be added*!
+  - the **divided difference** of $p_{i,k}$ is the coefficient of the highest degree term $x^k$: $[x_i,...,x_{i+k}]f =: c_{i, k}$ (thus base case $\forall i: c_{i,0} = y_i$)
+  - Recursive formula: $c_{i,k} = \frac{c_{i+1,k-1} - c_{i,k-1}}{x_{i+k} - x_i}$
+  ![triangle newton](./img/newton.png)
+  - Then $p(x) := c_{0,0} + c_{0,1} \cdot (x-x_0) + ... + c_{0,n} \cdot \prod_{i=0}^{n-1} (x-x_i)$
