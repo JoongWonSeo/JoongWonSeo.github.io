@@ -183,4 +183,25 @@ then $p_i(t) := y_i \cdot \alpha_1(t) + y_{i+1} \cdot \alpha_2(t) + (x_{i+1} - x
 To determine the $y_i'$s such that the 2nd derivatives at the knots are continuous, solve $p_{i-1}''(1) = p_i''(0)$ for all $y_i$s (tridiagonal system of linear equations of dim $n-1$)
 The remaining 2 degrees of freedom $y_0', y_n'$ are boundary conditions, either given directly, set by given 2nd derivatives, or such that it's periodic ($y_0' = y_n'$ and $s''(x_0) = s''(x_n)$)
 
-**cost**:
+**Cost**: tridiagonal system of equations can be solved in $O(n)$ as opposed to $O(n^3)$ for a full system, or the $O(n^2)$ for Aitken and Neville / Newton
+
+**Error**: since we're using cubic polynomials, $|f(x)-s(x)| = O(h^4)$
+
+
+**Trigonometric Interpolation**: given $n$ nodes on the unit circle $z_j := e^{2\pi i j / n}$ (equally spaced on the circle edge) and their corresponding values $v_j$, find the interpolant $p(z)$ where $z := e^{2\pi i t}, t \in [0; 1]$ such that $\forall j: p(z_j) = v_j$
+General representation as a linear combination of exponential functions:
+$p(z) := \sum_{k=0}^{n-1} c_k z^k = \sum_{k=0}^{n-1} c_k e^{2 \pi i k t}$ (can be separated into $cos$ and $sin$)
+Find the coefficients $c_k \implies$ **Discrete Fourier Transform**: 
+  - for $\omega := e^{2 \pi i / n}, M = (\omega^{jk})$, solve $\vec v = IDFT(\vec c) := M \cdot \vec c\ {} $ or $\ \vec c = DFT(\vec v) := \frac{1}{n} \cdot \overline M \cdot \vec v$, which takes $O(n^2)$
+  - the **Fast Fourier Transform** can calculate $v = IDFT(c)$ in $O(n\ log\ n)$ through recursion, halving $n = 2m$, $j \in [0; m-1]$:
+    $v_j = IDFT(c_0, c_2, ...) + \omega^j \cdot IDFT(c_1, c_3, ...)$
+    $v_{j+m} = \underbrace{IDFT(c_0, c_2, ...)}_{\text{even coefficients}} - \omega^j \cdot \underbrace{IDFT(c_1, c_3, ...)}_{\text{odd coefficients}}$
+  - Easier to visualize:
+  ![FFT](./img/FFT.png)
+
+  **Cosine Transform?**: ...
+
+
+  #### 3. Numerical Quadrature
+
+  
