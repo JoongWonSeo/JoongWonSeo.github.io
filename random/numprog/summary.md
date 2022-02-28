@@ -115,7 +115,7 @@ Max float = $\lambda := (B^t - 1) \cdot B^\beta$
   - **absolute rounding error**: $rd(x) - x$
   - **relative rounding error**: $\varepsilon := \frac{rd(x)-x}{x} \implies rd(x) = x \cdot (1+\varepsilon)$
   - **machine accuracy** $\bar \varepsilon \geq |\varepsilon|$: directed rounding: $\bar \varepsilon := \varrho$, correct rounding: $\bar \varepsilon := \varrho / 2$
-  - the *weak hypothesis* (see Lec. 1 P. 27) only allows for backward analysis, the *strong* allows for both
+  - the *weak hypothesis* (see Lec.1 P.27) only allows for backward analysis, the *strong* allows for both
 
 A floating point arithmetic $\dot *$ is ideal if it's the rounded *exact* result: $a \dot * b= rd(a * b) = (a * b) \cdot (1 + \varepsilon(a, b))$
 Most floating point operators are **not associative** anymore!
@@ -157,19 +157,30 @@ Therefore $p(x) := \sum_{k=0}^n y_k \cdot L_k(x)$ is a valid polynomial interpol
   ![triangle newton](./img/newton.png)
   - Then $p(x) := c_{0,0} + c_{0,1} \cdot (x-x_0) + ... + c_{0,n} \cdot \prod_{i=0}^{n-1} (x-x_i)$
 
-- **Error** of polynomial interpolants: ...
-  - equidistant nodes not optimal!
-  - runge effect
+- **Error** of polynomial interpolants: for a concrete intermediate point $\bar x$, its error $|f(\bar x) - p(\bar x)|$ is in $O(h^{n+1})$ for *equidistant mesh width* $h$:
+  $\Rightarrow$ lower $h$ and higher $n$ *should* decrease error in theory (but due to Runge effect, not in practice!)
+  - equidistant nodes not optimal! (*Chebychev nodes* to add more nodes at the edges is optimal)
 
-- **Condition** of poly...: ... 
-  - for large n (7+ or 8+), extremely ill-conditions for equidistant nodes
+- **Condition** of polynomial interpolants: sensitivity of error in $p(x)$ regarding error in $y_i$
+  - derivative of $y$ regarding $y_i$ is $L_i(x)$, but small errors in central supporting values are dramatically increased at the borders of the interpolation interval!
+  - for large n (7+ or 8+), extremely ill-conditioned for equidistant nodes
 
-**Interpolation using Polynomial Splines:** glue together pieces of polynomials of lower degree
+**Interpolation using Polynomial Splines:** glue together pieces of polynomials of lower degree to avoid expensive computation and the Runge effect
 - Spline $s: [a; b] \rarr \R$ of order $m$ / degree $m-1$:
-- $s(x) = p_i(x)$ on $[x_i; x_{i+1}]$ with $p_i \in \mathbb{P}_{m-1}$
-- locally: between two knots, polynomial of degree $m-1$
-- globally: $s$ is $m-2$ times continuously differentiable, e.g.:
-  - $m=1$: step function (piecewise continuous)
-    $m=2$: linear interpolation (knots are connected)
-    $m=3$: quadratic spline (knots have no sharp bends)
-    $m=4$: cubic spline (continuous 1st & 2nd derivatives)
+- $s(x) = p_i(x)$ on $[x_i; x_{i+1}]$, $n$ pieces of polynomials between each knots ($n+1$ knots)
+- locally: between two knots, polynomial of degree $m-1$ ($p_i \in \mathbb{P}_{m-1}$)
+- globally: $s$ is $m-2$ times continuously differentiable ($s \in C^{m-2}([a;b])$)
+  $m=1$: step function (piecewise continuous, not really a spline)
+  $m=2$: linear interpolation (knots are connected, not really spline either)
+  $m=3$: quadratic spline (knots have no sharp bends)
+  $m=4$: cubic spline (continuous 1st & 2nd derivatives)
+- $n+m-1$ degrees of freedom (of which $n+1$ knot contraints are given)
+
+**Cubic Splines** ($m=4$): each piece is a cubic polynomial with parameters $y_i$, $y_{i+1}$, $y_i'$, $y_{i+1}'$:
+$s(x) := p_i(t)$ where $t$ linearly connects from $(x_i; 0)$ to $(x_{i+1}; 1)$: $t := \frac{x-x_i}{x_{i+1}-x_i}$
+then $p_i(t) := y_i \cdot \alpha_1(t) + y_{i+1} \cdot \alpha_2(t) + (x_{i+1} - x_i) \cdot (y_i' \cdot \alpha_3(t) + y_{i+1}' \cdot \alpha_4(t))$ (see Lec.2 P.31 for $\alpha_i$ def.)
+<!--$\alpha_1(t) := 1 - 3t^2 + 2t^3;\ \alpha_2(t) := 3t^2 - 2t^3;\ \alpha_3(t) := t - 2t^2 + t^3;\ \alpha_4(t) := -t^2 + t^3$-->
+To determine the $y_i'$s such that the 2nd derivatives at the knots are continuous, solve $p_{i-1}''(1) = p_i''(0)$ for all $y_i$s (tridiagonal system of linear equations of dim $n-1$)
+The remaining 2 degrees of freedom $y_0', y_n'$ are boundary conditions, either given directly, set by given 2nd derivatives, or such that it's periodic ($y_0' = y_n'$ and $s''(x_0) = s''(x_n)$)
+
+**cost**:
