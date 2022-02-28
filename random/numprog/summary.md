@@ -156,3 +156,20 @@ Therefore $p(x) := \sum_{k=0}^n y_k \cdot L_k(x)$ is a valid polynomial interpol
   - Recursive formula: $c_{i,k} = \frac{c_{i+1,k-1} - c_{i,k-1}}{x_{i+k} - x_i}$
   ![triangle newton](./img/newton.png)
   - Then $p(x) := c_{0,0} + c_{0,1} \cdot (x-x_0) + ... + c_{0,n} \cdot \prod_{i=0}^{n-1} (x-x_i)$
+
+- **Error** of polynomial interpolants: ...
+  - equidistant nodes not optimal!
+  - runge effect
+
+- **Condition** of poly...: ... 
+  - for large n (7+ or 8+), extremely ill-conditions for equidistant nodes
+
+**Interpolation using Polynomial Splines:** glue together pieces of polynomials of lower degree
+- Spline $s: [a; b] \rarr \R$ of order $m$ / degree $m-1$:
+- $s(x) = p_i(x)$ on $[x_i; x_{i+1}]$ with $p_i \in \mathbb{P}_{m-1}$
+- locally: between two knots, polynomial of degree $m-1$
+- globally: $s$ is $m-2$ times continuously differentiable, e.g.:
+  - $m=1$: step function (piecewise continuous)
+    $m=2$: linear interpolation (knots are connected)
+    $m=3$: quadratic spline (knots have no sharp bends)
+    $m=4$: cubic spline (continuous 1st & 2nd derivatives)
