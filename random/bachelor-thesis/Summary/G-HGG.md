@@ -1,4 +1,4 @@
-# Background:
+# Ideas & Overview:
 
 - RL: Neural networks approximate value functions to **optimize long-term expected return**
 - Reward function engineering is challenging and important, thus we want *simple* **sparse binary reward**
@@ -10,10 +10,7 @@
     - using euclidean norm as distance between potential hindsight goal and target goal
     Thus cannot circumvent obstacles
 
-# Ideas:
-
-
-# Glossary & Symbols:
+# Details:
 
 **RL**: Agent can at every time step $t \in {0, 1, ...}$
     (1) observe current **state** $s_t$ from environment,
@@ -58,6 +55,9 @@ $Q^*(s,a) = \mathbb{E}_{s' \sim p(s, a)}[r(s, a) + \gamma \mathop{max}_{a' \in \
 - **HER**: train multi-goal UVFA setups with sparse rewards more efficiently
     - $f_g : \mathcal{S} \to \{0,1\}$ of each and every goal $\mathcal{g \in G}$: predicate that returns 1 if the given state $s$ satisfies the goal $g$
     - $m: \mathcal{S \to G}$: mapping where every state $s$ has at least one goal $g$ that is considered achieved, i.e. $\forall s \in \mathcal{S}: f_{m(s)}(s) = 1$
+    - $r_g(s,a)$ which returns -1 if goal is not reached and 0 if goal is reached (constant negative reward)
+    - Each episode consists of a **trajectory** $\tau = (s_0, s_1, ..., s_T)$ sequence of reached states, and the transitions $(s_t \parallel g, a_t, r_t, s_{t+1} \parallel g)$ between each state
+    - **Replay buffer** $R$: contains not only the past transitions with their original goals, but also some with **hindsight goals** $g' := \mathbb{S}(\tau)$, like $(s_t \parallel g', a_t, r_t, s_{t+1} \parallel g')$, where $\mathbb{S}(\tau)$ a **replay strategy** that chooses an appropriate hindsight goal (such as final state in that trajectory/episode)
 
 - (**EBP**)
-- **HGG**:
+- **HGG**: 
