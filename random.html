@@ -1,0 +1,466 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>Joong-Won Seo</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript>
+		<link rel="stylesheet" href="assets/css/noscript.css" />
+	</noscript>
+</head>
+
+<body class="is-preload">
+
+	<!-- Wrapper -->
+	<div id="wrapper" class="fade-in">
+
+		<!-- Header -->
+		<header id="header">
+			<a href="index.html" class="logo">Joong-Won Seo</a>
+		</header>
+
+		<!-- Nav -->
+		<nav id="nav">
+			<ul class="links">
+				<li><a href="index.html">Home</a></li>
+				<li class="active"><a href="random.html">Random</a></li>
+				<li><a href="cv.html">Curriculum Vitae</a></li>
+			</ul>
+			<ul class="icons">
+				<li><a href="https://github.com/JoongWonSeo" class="icon brands fa-github"><span
+							class="label">GitHub</span></a></li>
+				<li><a href="https://www.linkedin.com/in/joong-won-seo/" class="icon brands fa-linkedin"><span
+							class="label">LinkedIn</span></a></li>
+				<li><a href="https://twitter.com/unused_variable" class="icon brands fa-twitter"><span
+							class="label">Twitter</span></a></li>
+				<li><a href="https://www.instagram.com/joong.won.seo/" class="icon brands fa-instagram"><span
+							class="label">Instagram</span></a></li>
+			</ul>
+		</nav>
+
+		<!-- Main -->
+
+		<div id="main">
+
+			<article class="post featured">
+				<header class="major">
+					<span class="date">2022-SS</span>
+					<h2><a href="#">TUM: Augmented Reality Project</a></h2>
+					<p>
+						piARno: documented code and video coming soon™️
+					</p>
+				</header>
+
+			</article>
+
+			<article class="post featured">
+				<header class="major">
+					<span class="date">2021-WS</span>
+					<h2><a href="#">TUM: Numerical Programming Summary</a></h2>
+					<p>
+						An incomplete(!) summary/cheatsheet I wrote as exam prep for NumProg in the 2021 winter
+						semester!
+					</p>
+					<p>
+						⚠️ No guarantee of correctness! May contain errors! ⚠️
+					</p>
+				</header>
+
+				<iframe src="random/numprog/summary.html" width="100%" height="1000"
+					style="resize:both; overflow:auto;"></iframe>
+
+				<ul class="actions special">
+					<li><a href="random/numprog/summary.html" class="button large">Standalone HTML</a></li>
+					<li><a href="random/numprog/summary.md" class="button large">Markdown Source</a></li>
+				</ul>
+			</article>
+
+			<article class="post featured">
+				<header class="major">
+					<span class="date">2021-WS</span>
+					<h2><a href="#">TUM: Computational Intelligence Summary</a></h2>
+					<p>
+						An incomplete(!) summary/cheatsheet I wrote as exam prep for Computational Intelligence
+						(electrical engineering elective) in the 2021 winter semester!
+					</p>
+					<p>
+						⚠️ No guarantee of correctness! May contain errors! ⚠️
+					</p>
+				</header>
+
+				<iframe src="random/comp-intel/cheatsheet.html" width="100%" height="1000"
+					style="resize:both; overflow:auto;"></iframe>
+
+				<ul class="actions special">
+					<li><a href="random/comp-intel/cheatsheet.html" class="button large">Standalone HTML</a></li>
+					<li><a href="random/comp-intel/cheatsheet.md" class="button large">Markdown Source</a></li>
+					<li><a href="random/comp-intel/cheatsheet.pdf" class="button large">PDF (A4 double-sided)</a></li>
+				</ul>
+			</article>
+
+			<article class="post featured">
+				<header class="major">
+					<span class="date">2022-03</span>
+					<h2><a href="#">Python: Wordle helper</a></h2>
+					<p>
+						I really should stop making scripts that help me cheat in games that I'm bad at.
+					</p>
+				</header>
+
+				<details style="text-align: left;">
+					<summary><u>Python Source Code (click to show)</u></summary>
+					<pre>
+<code>from functools import *
+
+def satisfies(word, green, yellow, black):
+    return all(word[pos] == letter for letter, pos in green.items()) \
+        and all(letter in word and word[pos] != letter for letter, pos in yellow.items()) \
+        and all(letter not in word for letter in black)
+
+words_file = open('wordle.txt', 'r')
+words = {word.strip().lower() for word in words_file if len(word.strip()) == 5}
+
+print('How many simultaneous games? (wordle=1, quordle=4)')
+num = int(input())
+
+candidates = [list(words) for i in range(num)]
+green = [dict() for i in range(num)]
+yellow = [dict() for i in range(num)]
+black = [set() for i in range(num)]
+finished = [False for i in range(num)]
+
+while True:
+    print('Type Guess:')
+    guess = input()
+    if guess.lower() == 'done':
+        break
+
+    for n in range(num):
+        if finished[n]:
+            continue
+
+        print(f'Type result for game {n+1} ([g]reen, [y]ellow, [b]lack):')
+        result = input()
+
+        if result == 'ggggg':
+            finished[n] = True
+            continue
+
+        for i in range(5):
+            match result[i]:
+                case 'g':
+                    green[n][guess[i]] = i #this letter is at this pos
+                case 'y':
+                    yellow[n][guess[i]] = i #this letter is NOT at this pos
+                case 'b':
+                    black[n].add(guess[i]) #this letter is not at all
+        
+        black[n] = {w for w in black[n] if w not in green[n]} #cleanse
+
+        #print('g=', green[n], 'y=', yellow[n], 'b=', black[n])
+        candidates[n] = [word for word in candidates[n] if satisfies(word, green[n], yellow[n], black[n])]
+        print('Candidates:', candidates[n])
+    
+    if num > 1:
+        print('Candidates with max num:')
+        all_cand = reduce(lambda a, b: a + b, [candidates[i] for i in range(n) if not finished[i]], [])
+        all_cand = {word: all_cand.count(word) for word in all_cand}
+        print(dict(sorted(all_cand.items(), key=lambda kv: kv[1])))
+</code>
+</pre>
+				</details>
+
+				<p>
+					Don't forget to enable "Interactive Mode" if you're running this in JDoodle.
+				</p>
+
+				<iframe src="https://www.jdoodle.com/embed/v0/4XfD" width="100%" height="1000"
+					style="resize:both; overflow:auto;"></iframe>
+
+				<ul class="actions special">
+					<li><a href="https://jdoodle.com/a/4XfD" class="button large">Open in JDoodle</a></li>
+				</ul>
+
+			</article>
+
+			<article class="post featured">
+				<header class="major">
+					<span class="date">2022-01</span>
+					<h2><a href="#">Haskell: 24 Solver</a></h2>
+					<p>
+						I am very bad at two things: card games and mental arithmetic.
+						After losing a dozen games in a row to my girlfriend, I decided to write a Haskell script that
+						will solve the game for me.
+					</p>
+				</header>
+
+				<p>
+					The <a href="https://en.wikipedia.org/wiki/24_(puzzle)">card game 24</a> works like this: <br />
+					1. Draw 4 random cards from a deck. <br />
+					2. Find an integer expression consisting of the numbers on the card. <br />
+					3. If you play in a group, the slowest one must pick one of the others who supposedly know the
+					solution. <br />
+					4. If the selected player answers correctly, the slowest one takes a shot. If the selected player
+					was bluffing, they take two shots. <br />
+				</p>
+
+				<details style="text-align: left;">
+					<summary><u>Haskell Source Code (click to show)</u></summary>
+					<pre>
+<code>import Data.Maybe
+import Data.List
+
+ops :: [(Double -> Double -> Double, String -> String -> String)]
+ops = [
+        ((+), \a b -> a++"+"++b),
+        ((-), \a b -> a++"-"++b),
+        ((*), \a b -> a++"*"++b),
+        ((/), \a b -> a++"/"++b),
+        ((**), \a b -> a++"^"++b),
+        (\a b -> a ** (1/b), \a b -> a++"of "++b++"th root ")]
+
+check24 :: [Double] -> Maybe String
+check24 [] = Nothing
+check24 [x] = if x == 24 then Just "" else Nothing
+check24 (x:y:ls) = findFirst ops
+    where
+        findFirst [] = Nothing
+        findFirst ((op, toStr):ops) = case check24 (op x y : ls) of
+                                Nothing -> findFirst ops
+                                Just res -> Just (toStr (if length ls == 2 then "(((" ++ show x else "") (show y) ++ ")" ++ res)
+
+
+exists :: [Double] -> Bool
+exists [] = False
+exists [x] = if x == 24 then True else False
+exists (x:y:ls) = findFirst ops
+    where
+        findFirst [] = False
+        findFirst ((op, toStr):ops) = if exists (op x y : ls)
+            then True
+            else findFirst ops
+
+checkAll list = catMaybes [check24 p | p <- permutations list]
+existsAll list = filter (==True) [exists p | p <- permutations list]
+
+
+main = do
+    let solutions = checkAll [2, 4, 5, 7] -- all solutions of cards 2, 4, 5, 7 that results in 24
+    putStrLn "Expressions that result in 24:"
+    mapM_ putStrLn solutions</code>
+					</pre>
+				</details>
+
+				<iframe src="https://www.jdoodle.com/embed/v0/4Xfz" width="100%" height="1000"
+					style="resize:both; overflow:auto;"></iframe>
+
+				<ul class="actions special">
+					<li><a href="https://jdoodle.com/a/4Xfz" class="button large">Open in JDoodle</a></li>
+				</ul>
+			</article>
+
+			<article class="post featured">
+				<header class="major">
+					<span class="date">2021-WS</span>
+					<h2><a href="#">TUM: GDB Synthesis Algorithm in Python</a></h2>
+					<p>
+						If you've taken GDB at TUM you'll know what this is.
+						As faithful to the pseudocode implementation found in the lecture slides as I could make.
+						One of my first python scripts, had a lot of fun discovering convenient python features.
+					</p>
+				</header>
+
+				<details style="text-align: left;">
+					<summary><u>Python Source Code (click to show)</u></summary>
+					<pre>
+<code>import functools
+import operator
+import copy
+from collections import defaultdict
+from itertools import chain, combinations
+
+
+def powerset(iterable):
+    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+
+
+def setify(FDs):
+    # convert each FD from string -> string to set -> set
+    return [(set(left), set(right)) for (left, right) in FDs]
+
+
+def stringify(FDs):
+    # convert each FD from set -> set to string -> string
+    return [(', '.join(sorted(left)), ', '.join(sorted(right))) for (left, right) in FDs]
+
+
+def is_superkey(R, FDs, key):
+    return attribute_cover(FDs, key) == R
+
+
+def find_candidate_keys(R, FDs):
+    # EXTREMELY INEFFICIENT BRUTE FORCE SOLUTION!!!! O(2^n)!!!!!!!!!!!!!!!!!!!!!
+    # FDs should preferably be already canoninized to increase efficiency
+
+    # find all attributes who could be part of a key, i.e. it appears on the left side of a FD OR it never appears on the right side of any FD
+    attributes = {a for (left, right) in FDs for a in left} | {
+        a for a in R if not any([a in right for (left, right) in FDs])}
+
+    # for all subsets of attributes, check if it's a candidate key, i.e. it's a superkey that is not a proper superset of another key
+    candidates = []
+    for key in powerset(attributes):
+        if not any([set(c) < set(key) for c in candidates]) and is_superkey(R, FDs, set(key)):
+            candidates.append(tuple(sorted(key)))
+
+    return candidates
+
+
+def attribute_cover(FDs, attributes):
+    result = set(attributes)
+    changed = True
+    while(changed):
+        changed = False
+        for (left, right) in FDs:
+            if left <= result and not (right <= result):
+                result |= right
+                changed = True
+
+    return result
+
+
+def canonical_cover(FDs):
+    # FDs = copy.deepcopy(FDs) # using this won't permanently change input FDs
+
+    # left reduction
+    for i in range(len(FDs)):
+        left, right = FDs[i]
+        for a in left:
+            if right <= attribute_cover(FDs, left - {a}):
+                FDs[i] = (left - {a}, right)
+    
+    print('Left Reduction:')
+    for (left, right) in (stringify(FDs)):
+        print(left, '->', right)
+
+    # right reduction
+    for i in range(len(FDs)):
+        left, right = FDs[i]
+        for b in list(right):
+            right -= {b}
+            FDs[i] = (left, right)
+            if b not in attribute_cover(FDs, left):
+                right |= {b}
+                FDs[i] = (left, right)
+                
+    print('Right Reduction:')
+    for (left, right) in (stringify(FDs)):
+        print(left, '->', right)
+
+    # remove trivial (right side empty) FDs
+    FDs = [(frozenset(left), right) for (left, right) in FDs if len(right) > 0]
+
+    # unite same left sides
+    d = defaultdict(set)
+    for l, r in FDs:
+        d[l] |= r
+    FDs = list(d.items())
+
+    
+    print('Unify:')
+    for (left, right) in (stringify(FDs)):
+        print(left, '->', right)
+
+    return FDs
+
+
+def synthesize(R, FDs):
+    FDs = canonical_cover(FDs)
+
+    # transform FDs into relations
+    relations = set()
+    for left, right in FDs:
+        r = tuple(left) + tuple(right)
+        if not any([set(r) <= set(x) for x in relations]):
+            relations.add(r)
+
+    # if none of the relations contain keys to R, then create a relation of the key
+    candidate_keys = find_candidate_keys(R, FDs)
+    if not any([set(key) <= set(r) for key in candidate_keys for r in relations]):
+        print('Manually adding a minimal candidate key to the relation!')
+        relations.add(min(candidate_keys))
+
+    return FDs, candidate_keys, relations
+
+
+example = (
+        # R =
+        # Format: {'A', 'B', 'C'} === set('ABC')
+        set('ABCDE'),
+        # FDs =
+        # Format: Left -> Right === (Left, Right)
+        setify([
+            ('BD', 'CE'),
+            ('CE', 'BD'),
+            ('CD', 'AE'),
+            ('D', 'ABE'),
+            ('BC', 'AD')
+        ])
+    )
+
+
+R, FDs = example
+Fc, candidate_keys, relations = synthesize(R, FDs)
+
+print('\nCanonical Cover:')
+for (left, right) in (stringify(Fc)):
+    print(left, '->', right)
+
+print('\nCandidate Keys:')
+for key in sorted(candidate_keys):
+    print('(' + ', '.join(key) + ')')
+
+print('\nSynthesized Relations:')
+for r in relations:
+    print('{[' + ', '.join(r) + ']}')
+</code></pre>
+				</details>
+
+				<iframe src="https://www.jdoodle.com/embed/v0/4XfA" width="100%" height="1000"
+					style="resize:both; overflow:auto;"></iframe>
+
+				<ul class="actions special">
+					<li><a href="https://jdoodle.com/a/4XfA" class="button large">Open in JDoodle</a></li>
+				</ul>
+			</article>
+
+		</div>
+
+
+		<!-- Copyright -->
+		<div id="copyright">
+			<ul>
+				<ul>
+					<li>&copy; Joong-Won Seo</li>
+					<li>Design: <a href="https://html5up.net/massively">MASSIVELY</a></li>
+				</ul>
+			</ul>
+		</div>
+
+	</div>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.scrollex.min.js"></script>
+	<script src="assets/js/jquery.scrolly.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
