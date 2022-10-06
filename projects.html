@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>Joong-Won Seo</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript>
+		<link rel="stylesheet" href="assets/css/noscript.css" />
+	</noscript>
+</head>
+
+<body class="is-preload">
+
+	<!-- Wrapper -->
+	<div id="wrapper" class="fade-in">
+
+		<!-- Header -->
+		<header id="header">
+			<a href="index.html" class="logo">Joong-Won Seo</a>
+		</header>
+
+		<!-- Nav -->
+		<nav id="nav">
+			<ul class="links">
+				<li><a href="index.html">Home</a></li>
+				<li class="active"><a href="projects.html">Projects</a></li>
+				<li><a href="random.html">Random</a></li>
+				<li><a href="cv.html">Curriculum Vitae</a></li>
+			</ul>
+			<ul class="icons">
+				<li><a href="https://github.com/JoongWonSeo" class="icon brands fa-github"><span
+							class="label">GitHub</span></a></li>
+				<li><a href="https://www.linkedin.com/in/joong-won-seo/" class="icon brands fa-linkedin"><span
+							class="label">LinkedIn</span></a></li>
+				<li><a href="https://twitter.com/unused_variable" class="icon brands fa-twitter"><span
+							class="label">Twitter</span></a></li>
+				<li><a href="https://www.instagram.com/joong.won.seo/" class="icon brands fa-instagram"><span
+							class="label">Instagram</span></a></li>
+			</ul>
+		</nav>
+
+		<!-- Main -->
+
+		<div id="main">
+			
+			<article class="post featured" id="MelaScan">
+				<header class="major">
+					<span class="date">2022-10</span>
+					<h2><a href="#">TUM.ai Makeathon: Skin Cancer Detection App</a></h2>
+					<p>
+						I joined the TUM.ai makeathon without much thought or preperation. I just wanted to make something cool and eat free pizza, and I think I did (both)!
+						We made an app that can use the smartphone camera to detect melanoma (deadliest type of skin cancer) at an early stage, since it's very easily treatable at that point (just cut it off and put a bandade over it), but most deaths result from it being overlooked by doctors until it's too late.
+					</p>
+				</header>
+
+				<p>
+					For the 48h makeathon, I managed to assemble a team after lots of chaos, and originally convinced them to make an extension for social media, let's say twitter, where it would use NLP to try to analyse a post's opinion on a certain topic and try to recommend you a broad selection of posts with explicitly different opinions and perspectives.
+					The idea was that social media tends to put people in a bubble or an echo chamber, where their opinions get more and more extreme; therefore showing a much more broader and balanced set of ideas that much more accurately represents the spectrum/consensus of the public might help combat toxicity on the internet, and in turn, in society.
+					<br/>
+					But then after the actual challenges were publicized, we decided on the melanoma detection instead, since it looked more impactful and interesting. I mostly took care of the Flutter front-end, and the python backend for the inference using a PyTorch model, both of which I didn't have too much experience with. So I had to basically learn everything on-the-fly which resulted in me working for around 30h until the end of the deadline and pitch.
+					I actually quite like Flutter and found it pretty easy, since Dart is very Java-like with a lot of nice modern syntactic sugar sprinkled on top, and the UI framework is very polished.
+					<br/>
+					Anyways being my first makeathon/hackathon, I had a lot of fun and am proud of everything we learned and pulled off. It was very much worth the lack of sleep! There could have been more free pizza though, a lot of us were kind of starving... 
+					<br/>
+					We named it MelaScan and the goal of the app was simplicity and minimizing the time required from tapping the app icon until the analysis result is shown. For more details, see our embedded pitch slides below or visit the project on DevPost.
+				</p>
+
+				Screenshots: <br/>
+				<img height="640" src="projects/melascan/home.gif" alt="Home screen"/>
+				<img height="640" src="projects/melascan/scan.png" alt="Scanning"/>
+				<img height="640" src="projects/melascan/negative.png" alt="Negative result"/>
+				<img height="640" src="projects/melascan/positive.png" alt="Positive result"/>
+
+				<br/>
+
+				Our Final Pitch Slides: <br/>
+				<iframe src="http://docs.google.com/gview? url=https://joongwonseo.github.io/projects/melascan/pitch.pdf&embedded=true" style="width:718px; height:700px;" frameborder="0"></iframe>
+
+				<br/><br/>
+
+				<ul class="actions special">
+					<li><a href="https://devpost.com/software/melascan" class="button large">Project on DevPost</a></li>
+					<li><a href="https://github.com/TeamVersa/MelanomaDetection" class="button large">Code on GitHub</a></li>
+				</ul>
+			</article>
+
+			<article class="post featured" id="piARno">
+				<header class="major">
+					<span class="date">2022-SS</span>
+					<h2><a href="#">TUM: Augmented Reality Project</a></h2>
+					<p>
+						I always refused to learn to read the piano sheets as a kid because it was so exhausting to me and felt like there must be an easier way.
+						So I made one (with my <a href="https://github.com/piARn0/piARnoApp/people">friends</a>).
+					</p>
+				</header>
+
+				<p>
+					For the Augmented Reality lecture at TUM, we could earn a grade bonus by working on a 1-month group project for a basic AR application.
+					Originally I wanted to make <i>Line RidAR</i>, a pen-and-paper AR version of <a href="https://www.linerider.com/">Line Rider</a> where you would point a camera at a paper (or whiteboard or tablet, or really any drawable surface) and draw the track lines on it. Then you could tap play on the device and the sled rider would be spawned and you get to watch it slide down the lines you drew.
+					<br/>
+					While it would have been a neat little tech demo, I chose it mostly to keep the scope of the project small because my semester was already very busy.
+					So we decided to go for a project that is the total opposite! I probably sunk at least 100 hours into this... :')
+					<br/>
+					It works on the Oculus Quest 2 headset, using the Passthrough API, making it a pseudo-AR experience.
+					All you have to do is press the keys according to the falling tiles, like in a lot of rhythm games.
+					You, of course, still need a real piano <small style="font-size:x-small">though technically, with really good handtracking we could probably do full virtual (barely) playble piano that would suck compared to a real piano but still kinda cool regardless</small>.
+					<br/>
+					It was my first time diving (somewhat) deep into modern OpenGL and doing anything with OpenXR, along with using Android Studio.
+					It was fun and very rewarding, especially building the small engine that simplified most of the low-level stuff away into easy-to-use high-level classes.
+					Of course it was often times frustrating as well, with the lack of good documentation and all the gradle issues...
+					<br/>
+					It's fully open-source and you could install a pre-compiled APK onto your headset if you have one, see link below.
+				</p>
+
+				Short explanation: <br/>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/0_xlNFG5BpI" title="piArno demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				
+				<br/>
+				In-class presentation: <br/>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/gjbbWdPA_FM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				<br/>
+
+				<ul class="actions special">
+					<li><a href="https://github.com/piARn0/piARnoApp" class="button large">Code on GitHub</a></li>
+				</ul>
+			</article>
+
+		</div>
+
+
+		<!-- Copyright -->
+		<div id="copyright">
+			<ul>
+				<ul>
+					<li>&copy; Joong-Won Seo</li>
+					<li>Design: <a href="https://html5up.net/massively">MASSIVELY</a></li>
+				</ul>
+			</ul>
+		</div>
+
+	</div>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.scrollex.min.js"></script>
+	<script src="assets/js/jquery.scrolly.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
